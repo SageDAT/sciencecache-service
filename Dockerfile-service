@@ -1,0 +1,10 @@
+FROM python:3.6.4
+RUN apt-get update && apt-get install imagemagick
+
+WORKDIR /usr/src/app
+
+COPY requirements ./requirements
+RUN pip install --no-cache-dir -r requirements/dev.txt
+
+COPY config*.json *.py *.wsgi ./
+CMD [ "gunicorn", "sciencecache-service:app", "--bind", "0.0.0.0:8000", "--reload" ]
